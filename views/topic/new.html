@@ -1,0 +1,58 @@
+{{extend '../_layouts/home.html'}}
+
+{{block 'title'}}{{'多人博客 - 首页'}}{{/block}}
+
+{{block 'body'}}
+<section class="container">
+  <div class="row">
+    <div class="col-md-5">
+			<!-- 发表新文章 -->
+      <form id="contextNew">
+				<input type="hidden" name="nickname" id="nickname" value="{{ users.nickname }}" />
+        <div class="form-group">
+          <label for="plate">选择板块</label>
+          <select class="form-control" name="plate">
+            <option value="1">分享</option>
+            <option value="2">问答</option>
+            <option value="3">招聘</option>
+            <option value="4">客户端测试</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="title">标题</label>
+          <input type="text" class="form-control" required="required" name="title" id="title" placeholder="title">
+        </div>
+        <div class="form-group">
+          <label for="exampleInputPassword1">内容</label>
+          <textarea class="form-control" name="context" required="required" rows="3"></textarea>
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>
+    </div>
+  </div>
+</section>
+  <script src="/node_modules/jquery/dist/jquery.js"></script>
+	<script>
+		// 处理新文章
+		  $('#contextNew').on('submit', function (e) {
+		   e.preventDefault()
+		   var formData = $(this).serialize()
+		   $.ajax({
+		     url: '/topics/new',
+		     type: 'post',
+		     data: formData,
+		     dataType: 'json',
+		     success: function (data) {
+					var err_code = data.err_code
+		      console.log(data)
+					if(err_code===0){
+						window.alert('发表成功')
+					}else{
+						window.alert('发表失败')
+					}
+		     }
+		   })
+		 })
+	</script>
+
+{{/block}}

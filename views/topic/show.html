@@ -1,0 +1,86 @@
+{{extend '../_layouts/home.html'}}
+
+{{block 'title'}}{{'多人博客 - 首页'}}{{/block}}
+
+{{block 'head'}}
+<link rel="stylesheet" href="/public/css/markdown-github.css">
+<style>
+	.panel .panel-heading .action i {
+    margin-right: 10px;
+  }
+</style>
+{{/block}}
+
+{{block 'body'}}
+<section class="container">
+	<!-- 显示文章的标题内容等 -->
+	<div class="row">
+		<div class="col-md-9">
+			<article class="markdown-body">
+				<h1 id="_1"><a name="user-content-_1" href="#_1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>
+					<p>{{ topics.title }}</p>
+				</h1>
+				<h3 id="_3"><a name="user-content-_3" href="#_3" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>博客内容</h3>
+				<pre><code class="javascript">
+					{{ topics.context }}
+					</code>
+				</pre>
+				<h2 id="_6"><a name="user-content-_6" href="#_6" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>是什么</h2>
+				<h2 id="_7"><a name="user-content-_7" href="#_7" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>为什么</h2>
+				<h2 id="_8"><a name="user-content-_8" href="#_8" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>怎么做</h2>
+				<h2 id="_9"><a name="user-content-_9" href="#_9" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>哈哈哈</h2>
+			</article>
+			<!-- 显示评论 -->
+			{{ each comments }}
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<span>匿名用户</span> 
+						<span>评论时间：{{ $value.created_time }}</span>
+						<span class="action">
+							<a href=""><i class="glyphicon glyphicon-thumbs-up pull-right"></i></a>
+							<a href=""><i class="glyphicon glyphicon-remove-circle pull-right"></i></a>
+							<a href=""><i class="glyphicon glyphicon-remove-circle pull-right"></i></a>
+						</span>
+					</div>
+					<div class="panel-body">
+						{{ $value.comment }}
+					</div>
+				</div>
+			{{ /each comments }}
+			<!-- 回复 -->
+			<form id="comment_form">
+				<div class="form-group">
+					<label for="comment">添加回复</label>
+					<textarea class="form-control" name="comment" id="" cols="10" rows="10" required="required"></textarea>
+				</div><div class="form-group">
+					<label for="id">添加回复</label>
+				</div>
+				<button type="submit" class="btn btn-success">回复</button>
+			</form>
+		</div>
+	</div>
+	<script src="/node_modules/jquery/dist/jquery.js"></script>
+	<script>
+		// 处理回复
+		$('#comment_form').on('submit', function(e) {
+			e.preventDefault()
+			var formData = $(this).serialize()
+			$.ajax({
+				url: '/comment',
+				type: 'post',
+				data: formData,
+				dataType: 'json',
+				success: function(data) {
+					var err_code = data.err_code
+					if (err_code === -1) {
+						window.alert('请先登录')
+					} else if (err_code === 0) {
+						window.alert('评论成功')
+						parent.location.reload();
+					}
+				}
+			})
+		})
+	</script>
+</section>
+{{/block}}
