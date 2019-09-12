@@ -42,7 +42,7 @@ router.get('/topics/show',function(req,res){
 	})
 })
 
-// 博客评论（此功能为完善，评论会评论所有博客）
+// 博客评论（此功能未完善，评论会评论所有博客）
 router.post('/comment',function(req,res){
 	var  users= req.session.bodys
 	if(!users){
